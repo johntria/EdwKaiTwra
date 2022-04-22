@@ -33,4 +33,4 @@ build/
 .vscode/
 
 #Ignore files related to API keys
-.yml
+src/main/resources/application-dev.yml
