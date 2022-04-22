@@ -7,9 +7,9 @@ spring:
       enabled: ALWAYS
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: "jdbc:mysql://localhost:3306/local"
-    username: root
-    password: admin
+    url: jdbc:mysql://localhost:3306/edwKaiTwra
+    username: john
+    password: password
   jpa:
     hibernate.ddl-auto: update
     generate-ddl: true
@@ -17,4 +17,4 @@ spring:
     properties:
       hibernate.format_sql: true
 
-#test
+#test22
