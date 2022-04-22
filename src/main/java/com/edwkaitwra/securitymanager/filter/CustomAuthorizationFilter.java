@@ -28,6 +28,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         if (request.getServletPath().equals("/api/login") || request.getServletPath().equals("/api/token/refresh")) {
@@ -55,7 +56,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     response.setStatus(FORBIDDEN.value());
                     Map<String, String> error = new HashMap<>();
                     this.logger.error(e.getMessage());
-                    error.put("error", String.valueOf(FORBIDDEN.value() + " " + FORBIDDEN.getReasonPhrase()));
+                    error.put("error", FORBIDDEN.value() + " " + FORBIDDEN.getReasonPhrase());
                     response.setContentType(APPLICATION_JSON_VALUE);
                     new ObjectMapper().writeValue(response.getOutputStream(), error);
                 }

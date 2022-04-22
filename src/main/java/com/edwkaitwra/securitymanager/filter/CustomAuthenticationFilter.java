@@ -17,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,8 +30,21 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
 
-    public CustomAuthenticationFilter(AuthenticationManager authenticationManager) {
+
+    private Integer accessTokenExpiredInDays;
+
+
+    private Integer refreshTokenExpiredInDays;
+
+
+    private String jwtSecret;
+
+
+    public CustomAuthenticationFilter(AuthenticationManager authenticationManager, Integer accessTokenExpiredInDays, Integer refreshTokenExpiredInDays, String jwtSecret) {
         this.authenticationManager = authenticationManager;
+        this.accessTokenExpiredInDays = accessTokenExpiredInDays;
+        this.refreshTokenExpiredInDays = refreshTokenExpiredInDays;
+        this.jwtSecret = jwtSecret;
     }
 
     @Override
@@ -42,20 +56,29 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         return authenticationManager.authenticate(authenticationToken);
     }
 
+    static Date currentDatePlusDay(int days) {
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DATE, days);
+        Date date = c.getTime();
+        return date;
+    }
+
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
         User user = (User) authentication.getPrincipal();
-        Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+
+        Algorithm algorithm = Algorithm.HMAC256(jwtSecret.getBytes());
+        Calendar cal = Calendar.getInstance();
         String access_token = JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
+                .withExpiresAt(currentDatePlusDay(accessTokenExpiredInDays)) // new Date(System.currentTimeMillis() + 43200 * 60 * 1000) === currentDay + 30 Days
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
 
         String refresh_token = JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
+                .withExpiresAt(currentDatePlusDay(refreshTokenExpiredInDays)) // new Date(System.currentTimeMillis() + 43200 * 60 * 1000) === currentDay + 90 Days
                 .withIssuer(request.getRequestURL().toString())
                 .sign(algorithm);
 
@@ -67,3 +90,5 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     }
 
 }
+
+

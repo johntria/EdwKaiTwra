@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
         User loadedUser = user.get();
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        loadedUser.getRoles().forEach(role -> {
+        loadedUser.getRole().forEach(role -> {
             authorities.add(new SimpleGrantedAuthority(role.getName()));
         });
 
@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         Role role = roleRepo.findByName(roleName);
 
         //It's a transactional service, in .add we automatically save in DB
-        user.get().getRoles().add(role);
+        user.get().getRole().add(role);
     }
 
     @Override

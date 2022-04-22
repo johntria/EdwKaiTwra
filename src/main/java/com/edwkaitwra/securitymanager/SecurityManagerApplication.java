@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 //@EnableZuulProxy
 @SpringBootApplication
+@EnableAutoConfiguration
 public class SecurityManagerApplication {
 
 	public static void main(String[] args) {

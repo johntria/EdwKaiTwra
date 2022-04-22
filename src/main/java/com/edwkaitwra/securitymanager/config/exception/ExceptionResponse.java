@@ -2,6 +2,7 @@ package com.edwkaitwra.securitymanager.config.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+
 import java.util.Date;
 
 @Data

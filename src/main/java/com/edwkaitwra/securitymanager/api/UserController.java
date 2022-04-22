@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -22,7 +23,6 @@ import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -33,6 +33,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Slf4j
 public class UserController {
     private final UserService userService;
+
+    @Value("${key.access-token-expired}")
+    private Integer accessTokenExpiredInDays;
 
     @GetMapping("/users")
     public ResponseEntity<List<User>> getUser() {
@@ -57,9 +60,16 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    static Date currentDatePlusDay(int days) {
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DATE, days);
+        Date date = c.getTime();
+        return date;
+    }
+
     @GetMapping("/token/refresh")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        this.log.info("Rest request to refresh token");
+        UserController.log.info("Rest request to refresh token");
         String authorizationHeader = request.getHeader(AUTHORIZATION);
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             try {
@@ -71,9 +81,9 @@ public class UserController {
                 User user = userService.getUser(username);
                 String access_token = JWT.create()
                         .withSubject(user.getEmail())
-                        .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
+                        .withExpiresAt(currentDatePlusDay(accessTokenExpiredInDays))
                         .withIssuer(request.getRequestURL().toString())
-                        .withClaim("roles", user.getRoles().stream().map(Role::getName).collect(Collectors.toList()))
+                        .withClaim("roles", user.getRole().stream().map(Role::getName).collect(Collectors.toList()))
                         .sign(algorithm);
                 Map<String, String> tokens = new HashMap<>();
                 tokens.put("access_token", access_token);
@@ -84,13 +94,13 @@ public class UserController {
             } catch (Exception e) {
                 response.setStatus(FORBIDDEN.value());
                 Map<String, String> error = new HashMap<>();
-                this.log.error(e.getMessage());
+                UserController.log.error(e.getMessage());
                 error.put("error", "Generic Error");
                 response.setContentType(APPLICATION_JSON_VALUE);
                 new ObjectMapper().writeValue(response.getOutputStream(), error);
             }
         } else {
-            this.log.error("Refresh Token is missing");
+            UserController.log.error("Refresh Token is missing");
             throw new RuntimeException("Refresh Token is missing");
         }
     }

@@ -52,7 +52,7 @@ public class User implements Serializable {
     private String imageUrl;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private Collection<Role> roles = new ArrayList<>();
+    private Collection<Role> role = new ArrayList<>();
 
 
 }

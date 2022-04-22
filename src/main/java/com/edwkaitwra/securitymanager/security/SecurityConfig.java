@@ -3,7 +3,7 @@ package com.edwkaitwra.securitymanager.security;
 import com.edwkaitwra.securitymanager.filter.CustomAuthenticationFilter;
 import com.edwkaitwra.securitymanager.filter.CustomAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,8 +19,21 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 
-@Configuration @EnableWebSecurity @RequiredArgsConstructor
+@Configuration
+@EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Value("${key.access-token-expired}")
+    private Integer accessTokenExpiredInDays;
+
+
+    @Value("${key.refresh-token-expired}")
+    private Integer refreshTokenExpiredInDays;
+
+    @Value("${key.jwt-secret}")
+    private String jwtSecret;
+
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -31,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        CustomAuthenticationFilter customAuthenticationFilter=new CustomAuthenticationFilter(authenticationManagerBean());
+        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean(), accessTokenExpiredInDays, refreshTokenExpiredInDays, jwtSecret);
         customAuthenticationFilter.setFilterProcessesUrl("/api/login");
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
