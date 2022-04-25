@@ -1,6 +1,6 @@
-package com.edwkaitwra.securitymanager.repo;
+package com.edwkaitwra.backend.repo;
 
-import com.edwkaitwra.securitymanager.domain.User;
+import com.edwkaitwra.backend.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

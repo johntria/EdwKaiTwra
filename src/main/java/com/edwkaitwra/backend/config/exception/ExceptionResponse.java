@@ -1,4 +1,4 @@
-package com.edwkaitwra.securitymanager.config.exception;
+package com.edwkaitwra.backend.config.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,7 +1,7 @@
-package com.edwkaitwra.securitymanager.security;
+package com.edwkaitwra.backend.security;
 
-import com.edwkaitwra.securitymanager.filter.CustomAuthenticationFilter;
-import com.edwkaitwra.securitymanager.filter.CustomAuthorizationFilter;
+import com.edwkaitwra.backend.filter.CustomAuthenticationFilter;
+import com.edwkaitwra.backend.filter.CustomAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

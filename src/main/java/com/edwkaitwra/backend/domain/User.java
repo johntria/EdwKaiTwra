@@ -1,4 +1,4 @@
-package com.edwkaitwra.securitymanager.domain;
+package com.edwkaitwra.backend.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;

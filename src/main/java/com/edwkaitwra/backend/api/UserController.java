@@ -1,12 +1,12 @@
-package com.edwkaitwra.securitymanager.api;
+package com.edwkaitwra.backend.api;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.edwkaitwra.securitymanager.domain.Role;
-import com.edwkaitwra.securitymanager.domain.User;
-import com.edwkaitwra.securitymanager.service.UserService;
+import com.edwkaitwra.backend.domain.Role;
+import com.edwkaitwra.backend.domain.User;
+import com.edwkaitwra.backend.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

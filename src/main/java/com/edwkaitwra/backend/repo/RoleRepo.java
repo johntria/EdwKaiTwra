@@ -1,6 +1,6 @@
-package com.edwkaitwra.securitymanager.repo;
+package com.edwkaitwra.backend.repo;
 
-import com.edwkaitwra.securitymanager.domain.Role;
+import com.edwkaitwra.backend.domain.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RoleRepo extends JpaRepository<Role,Long> {

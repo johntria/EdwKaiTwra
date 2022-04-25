@@ -1,7 +1,7 @@
-package com.edwkaitwra.securitymanager.service;
+package com.edwkaitwra.backend.service;
 
-import com.edwkaitwra.securitymanager.domain.Role;
-import com.edwkaitwra.securitymanager.domain.User;
+import com.edwkaitwra.backend.domain.Role;
+import com.edwkaitwra.backend.domain.User;
 
 import java.util.List;
 

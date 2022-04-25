@@ -1,9 +1,9 @@
-package com.edwkaitwra.securitymanager.service;
+package com.edwkaitwra.backend.service;
 
-import com.edwkaitwra.securitymanager.domain.Role;
-import com.edwkaitwra.securitymanager.domain.User;
-import com.edwkaitwra.securitymanager.repo.RoleRepo;
-import com.edwkaitwra.securitymanager.repo.UserRepo;
+import com.edwkaitwra.backend.domain.Role;
+import com.edwkaitwra.backend.domain.User;
+import com.edwkaitwra.backend.repo.RoleRepo;
+import com.edwkaitwra.backend.repo.UserRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

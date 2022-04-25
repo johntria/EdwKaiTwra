@@ -1,4 +1,4 @@
-package com.edwkaitwra.securitymanager.filter;
+package com.edwkaitwra.backend.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;

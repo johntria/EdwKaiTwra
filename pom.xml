@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.edwkaitwra</groupId>
-    <artifactId>security-manager</artifactId>
+    <artifactId>back-end</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>security-manager</name>
-    <description>Security Manger for EDW KAI TWRA</description>
+    <name>back-end</name>
+    <description>Back End for EDW KAI TWRA</description>
     <properties>
         <java.version>18</java.version>
     </properties>
@@ -56,8 +56,6 @@
             <artifactId>java-jwt</artifactId>
             <version>3.19.1</version>
         </dependency>
-
-
 
         <dependency>
             <groupId>javax.validation</groupId>
