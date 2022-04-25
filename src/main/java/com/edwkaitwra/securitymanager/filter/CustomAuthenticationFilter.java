@@ -71,14 +71,14 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         Calendar cal = Calendar.getInstance();
         String access_token = JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(currentDatePlusDay(accessTokenExpiredInDays)) // new Date(System.currentTimeMillis() + 43200 * 60 * 1000) === currentDay + 30 Days
+                .withExpiresAt(currentDatePlusDay(accessTokenExpiredInDays))
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
 
         String refresh_token = JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(currentDatePlusDay(refreshTokenExpiredInDays)) // new Date(System.currentTimeMillis() + 43200 * 60 * 1000) === currentDay + 90 Days
+                .withExpiresAt(currentDatePlusDay(refreshTokenExpiredInDays))
                 .withIssuer(request.getRequestURL().toString())
                 .sign(algorithm);
 
