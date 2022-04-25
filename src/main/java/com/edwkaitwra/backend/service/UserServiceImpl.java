@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<User> user = userRepo.findByEmail(email);
         if (user.isEmpty()) {
-            log.error("User not found ");
+            log.error("User not found " + email);
             throw new UsernameNotFoundException("User not found");
         } else {
             log.info("User found in DB " + user.get().getEmail());
