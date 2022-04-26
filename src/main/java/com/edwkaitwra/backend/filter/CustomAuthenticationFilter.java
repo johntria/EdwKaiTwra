@@ -31,13 +31,13 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     private final AuthenticationManager authenticationManager;
 
 
-    private Integer accessTokenExpiredInDays;
+    private final Integer  accessTokenExpiredInDays;
 
 
-    private Integer refreshTokenExpiredInDays;
+    private final Integer refreshTokenExpiredInDays;
 
 
-    private String jwtSecret;
+    private final String jwtSecret;
 
 
     public CustomAuthenticationFilter(AuthenticationManager authenticationManager, Integer accessTokenExpiredInDays, Integer refreshTokenExpiredInDays, String jwtSecret) {
@@ -57,6 +57,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     }
 
     static Date currentDatePlusDay(int days) {
+        //TODO: ADD THIS CLASS TO UTILLS
         Calendar c = Calendar.getInstance();
         c.add(Calendar.DATE, days);
         Date date = c.getTime();
@@ -68,23 +69,22 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         User user = (User) authentication.getPrincipal();
 
         Algorithm algorithm = Algorithm.HMAC256(jwtSecret.getBytes());
-        Calendar cal = Calendar.getInstance();
-        String access_token = JWT.create()
+        String accessToken = JWT.create()
                 .withSubject(user.getUsername())
                 .withExpiresAt(currentDatePlusDay(accessTokenExpiredInDays))
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
 
-        String refresh_token = JWT.create()
+        String refreshToken = JWT.create()
                 .withSubject(user.getUsername())
                 .withExpiresAt(currentDatePlusDay(refreshTokenExpiredInDays))
                 .withIssuer(request.getRequestURL().toString())
                 .sign(algorithm);
 
         Map<String, String> tokens = new HashMap<>();
-        tokens.put("access_token", access_token);
-        tokens.put("refresh_token", refresh_token);
+        tokens.put("access_token", accessToken);
+        tokens.put("refresh_token", refreshToken);
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);
     }
