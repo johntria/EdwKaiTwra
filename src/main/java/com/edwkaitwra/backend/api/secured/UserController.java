@@ -1,4 +1,4 @@
-package com.edwkaitwra.backend.api;
+package com.edwkaitwra.backend.api.secured;
 
 import com.edwkaitwra.backend.domain.Role;
 import com.edwkaitwra.backend.domain.User;
@@ -14,6 +14,8 @@ import javax.annotation.security.RolesAllowed;
 import java.net.URI;
 import java.util.List;
 
+import static com.edwkaitwra.backend.domain.Role.GODUSER;
+
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -22,8 +24,8 @@ public class UserController {
     private final UserService userService;
 
 
-    @GetMapping("/users")
-    @RolesAllowed({"GODUSER"})
+    @GetMapping("/open/test")
+    @RolesAllowed(GODUSER)
     public ResponseEntity<List<User>> getUser() {
         return ResponseEntity.ok().body(userService.getUsers());
     }
