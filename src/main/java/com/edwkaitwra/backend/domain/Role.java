@@ -14,7 +14,9 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Role {
-
+    public static final String GODUSER = "ROLE_GODUSER";
+    public static final String SUPERUSER = "ROLE_SUPERUSER";
+    public static final String USER = "ROLE_USER";
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
