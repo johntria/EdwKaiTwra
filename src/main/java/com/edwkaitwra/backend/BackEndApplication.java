@@ -11,13 +11,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableAutoConfiguration
 public class BackEndApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(BackEndApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(BackEndApplication.class, args);
+    }
 
-	@Bean
-	PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
 }
