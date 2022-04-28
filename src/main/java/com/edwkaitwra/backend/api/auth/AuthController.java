@@ -19,12 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.edwkaitwra.backend.utills.Utills.currentDatePlusDay;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -81,10 +80,5 @@ public class AuthController {
         }
     }
 
-    static Date currentDatePlusDay(int days) {
-        Calendar c = Calendar.getInstance();
-        c.add(Calendar.DATE, days);
-        Date date = c.getTime();
-        return date;
-    }
+
 }

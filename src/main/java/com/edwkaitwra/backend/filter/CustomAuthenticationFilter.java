@@ -17,12 +17,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.edwkaitwra.backend.utills.Utills.currentDatePlusDay;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 
@@ -31,7 +30,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     private final AuthenticationManager authenticationManager;
 
 
-    private final Integer  accessTokenExpiredInDays;
+    private final Integer accessTokenExpiredInDays;
 
 
     private final Integer refreshTokenExpiredInDays;
@@ -51,18 +50,11 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-        log.info("Attempts Authentication with Email:" + email );
+        log.info("Attempts Authentication with Email:" + email);
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
         return authenticationManager.authenticate(authenticationToken);
     }
 
-    static Date currentDatePlusDay(int days) {
-        //TODO: ADD THIS CLASS TO UTILLS
-        Calendar c = Calendar.getInstance();
-        c.add(Calendar.DATE, days);
-        Date date = c.getTime();
-        return date;
-    }
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
