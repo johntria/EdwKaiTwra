@@ -21,34 +21,30 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-@EnableGlobalMethodSecurity(prePostEnabled = true,securedEnabled = true,jsr250Enabled = true)
-public class SecurityConfig  {
-
-    @Value("${key.access-token-expired}")
-    private Integer accessTokenExpiredInDays;
-
-
-    @Value("${key.refresh-token-expired}")
-    private Integer refreshTokenExpiredInDays;
-
-    @Value("${key.jwt-secret}")
-    private String jwtSecret;
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
+public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
+    @Value("${key.access-token-expired}")
+    private Integer accessTokenExpiredInDays;
+    @Value("${key.refresh-token-expired}")
+    private Integer refreshTokenExpiredInDays;
+    @Value("${key.jwt-secret}")
+    private String jwtSecret;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf().disable().cors().disable();;
+                .csrf().disable().cors().disable();
+        ;
 
         http
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http
                 .authorizeRequests()
-                .antMatchers("/error","/api/open/**").permitAll();
+                .antMatchers("/error", "/api/open/**").permitAll();
         http
                 .authorizeRequests()
                 .antMatchers("/api/login/**", "/api/token/refresh/**").permitAll();
@@ -64,6 +60,10 @@ public class SecurityConfig  {
         return http.build();
     }
 
+    public MyCustomDsl customDsl() {
+        return new MyCustomDsl();
+    }
+
     public class MyCustomDsl extends AbstractHttpConfigurer<MyCustomDsl, HttpSecurity> {
         @Override
         public void configure(HttpSecurity http) throws Exception {
@@ -74,10 +74,6 @@ public class SecurityConfig  {
             filter.setFilterProcessesUrl("/api/login");
             http.addFilter(filter);
         }
-    }
-
-    public MyCustomDsl customDsl() {
-        return new MyCustomDsl();
     }
 
 }
