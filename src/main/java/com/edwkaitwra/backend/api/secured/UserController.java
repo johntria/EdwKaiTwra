@@ -24,9 +24,10 @@ public class UserController {
     private final UserService userService;
 
 
-    @GetMapping("/open/test")
+    @GetMapping("/users")
     @RolesAllowed(GODUSER)
     public ResponseEntity<List<User>> getUser() {
+
         return ResponseEntity.ok().body(userService.getUsers());
     }
 
