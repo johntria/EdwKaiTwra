@@ -1,18 +1,23 @@
 server:
   port: 8080
-
+key:
+  access-token-expired: 30 #days
+  refresh-token-expired: 90 #days
+  jwt-secret: #secret
 spring:
   output:
     ansi:
       enabled: ALWAYS
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://DB URL/MY DB
-    username: MY USERNAME
-    password: MY PASSWORD
+    url: #jdbc:mysql://localhost:3306/name_of_database
+    username: #username
+    password: #password
   jpa:
     hibernate.ddl-auto: update
     generate-ddl: true
     show-sql: true
     properties:
       hibernate.format_sql: true
+
+
