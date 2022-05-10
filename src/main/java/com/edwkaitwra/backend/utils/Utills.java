@@ -1,4 +1,4 @@
-package com.edwkaitwra.backend.utills;
+package com.edwkaitwra.backend.utils;
 
 import java.util.Calendar;
 import java.util.Date;
