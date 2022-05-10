@@ -1,5 +1,6 @@
 package com.edwkaitwra.backend.service;
 
+import com.edwkaitwra.backend.config.exception.handler.UserIsNotActivatedException;
 import com.edwkaitwra.backend.domain.Role;
 import com.edwkaitwra.backend.domain.User;
 import com.edwkaitwra.backend.repo.RoleRepo;
@@ -29,22 +30,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<User> user = userRepo.findByEmail(email);
-        if (user.isEmpty()) {
-            log.error("User not found " + email);
-            throw new UsernameNotFoundException("User not found");
-        } else {
-            log.info("User found in DB " + user.get().getEmail());
-        }
-        User loadedUser = user.get();
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException, UserIsNotActivatedException {
+        User user = userRepo.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        this.isActivated(user, email);
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        loadedUser.getRole().forEach(role -> {
+        user.getRole().forEach(role -> {
             authorities.add(new SimpleGrantedAuthority(role.getName()));
         });
-
         //We need to return the UserDetails User and not custom user implementation
-        return new org.springframework.security.core.userdetails.User(loadedUser.getEmail(), loadedUser.getPassword(), authorities);
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), user.isActivated(), true, true, true, authorities);
     }
 
     @Override
@@ -63,36 +57,50 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void addRoleToUser(String email, String roleName) {
         log.info("Adding role " + roleName + " to user " + email);
-        Optional<User> user = userRepo.findByEmail(email);
-        if (user.isEmpty()) {
-            log.error("User not found ");
-            throw new UsernameNotFoundException("User not found");
-        } else {
-            log.info("User found in DB " + user.get().getEmail());
-        }
+        User user = userRepo.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         Role role = roleRepo.findByName(roleName);
 
         //It's a transactional service, in .add we automatically save in DB
-        user.get().getRole().add(role);
+        user.getRole().add(role);
     }
 
     @Override
     public User getUser(String email) {
         log.info("Fetching User " + email);
-        Optional<User> user = userRepo.findByEmail(email);
-        if (user.isEmpty()) {
-            log.error("User not found ");
-            throw new UsernameNotFoundException("User not found");
-        } else {
-            log.info("User found in DB " + user.get().getEmail());
-        }
-        return user.get();
+        User user = userRepo.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return user;
     }
 
     @Override
     public List<User> getUsers() {
         log.info("Fetching All Users ");
         return userRepo.findAll();
+    }
+
+    @Override
+    public void isActivated(User user, String email) {
+        if (user.isActivated()) {
+            log.info("User " + email + " is already activated");
+        } else {
+            log.error("User " + email + " is not activated");
+            throw new UserIsNotActivatedException("Your account is not activated, " + "Please look at your emails ");
+        }
+
+    }
+
+    @Override
+    public void isActivatedByEmail(String email) {
+        User user = userRepo.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        this.isActivated(user, email);
+    }
+
+    public void userExists(Optional<User> user, String email) {
+        if (user.isEmpty()) {
+            log.error("User not found " + email);
+            throw new UsernameNotFoundException("User not found");
+        } else {
+            log.info("User found in DB " + user.get().getEmail());
+        }
     }
 
 

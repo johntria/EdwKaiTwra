@@ -15,4 +15,10 @@ public interface UserService {
     User getUser(String email);
 
     List<User> getUsers();
+
+    void isActivated(User user, String email);
+
+    void isActivatedByEmail(String email);
+
+
 }
