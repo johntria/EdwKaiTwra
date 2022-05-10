@@ -2,7 +2,9 @@ package com.edwkaitwra.backend.security;
 
 import com.edwkaitwra.backend.filter.CustomAuthenticationFilter;
 import com.edwkaitwra.backend.filter.CustomAuthorizationFilter;
+import com.edwkaitwra.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +28,8 @@ public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    private UserService userService;
     @Value("${key.access-token-expired}")
     private Integer accessTokenExpiredInDays;
     @Value("${key.refresh-token-expired}")
@@ -33,11 +37,12 @@ public class SecurityConfig {
     @Value("${key.jwt-secret}")
     private String jwtSecret;
 
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable().cors().disable();
-        ;
+
 
         http
                 .sessionManagement()
@@ -47,7 +52,7 @@ public class SecurityConfig {
                 .antMatchers("/error", "/api/open/**").permitAll();
         http
                 .authorizeRequests()
-                .antMatchers("/api/login/**", "/api/token/refresh/**").permitAll();
+                .antMatchers("/api/auth/**", "/api/login ", "/api/token/refresh/**").permitAll();
         http
                 .authorizeRequests()
                 .anyRequest().authenticated();
@@ -55,7 +60,8 @@ public class SecurityConfig {
         http
                 .apply(customDsl());
         http
-                .addFilterBefore(new CustomAuthorizationFilter(jwtSecret), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new CustomAuthorizationFilter(jwtSecret, userService), UsernamePasswordAuthenticationFilter.class);
+
 
         return http.build();
     }
@@ -64,11 +70,13 @@ public class SecurityConfig {
         return new MyCustomDsl();
     }
 
+
     public class MyCustomDsl extends AbstractHttpConfigurer<MyCustomDsl, HttpSecurity> {
         @Override
         public void configure(HttpSecurity http) throws Exception {
             AuthenticationManager authenticationManager =
                     http.getSharedObject(AuthenticationManager.class);
+
             CustomAuthenticationFilter filter =
                     new CustomAuthenticationFilter(authenticationManager, accessTokenExpiredInDays, refreshTokenExpiredInDays, jwtSecret);
             filter.setFilterProcessesUrl("/api/login");
