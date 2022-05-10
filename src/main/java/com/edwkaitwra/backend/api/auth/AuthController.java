@@ -23,18 +23,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.edwkaitwra.backend.utills.Utills.currentDatePlusDay;
+import static com.edwkaitwra.backend.utils.Utills.currentDatePlusDay;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 @Slf4j
 public class AuthController {
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Value("${key.access-token-expired}")
     private Integer accessTokenExpiredInDays;
