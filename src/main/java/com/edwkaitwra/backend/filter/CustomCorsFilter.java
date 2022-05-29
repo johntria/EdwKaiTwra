@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.springframework.http.HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN;
 import static org.springframework.http.HttpHeaders.ORIGIN;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -40,7 +41,7 @@ public class CustomCorsFilter implements Filter {
                 log.error("Cors not contains origin");
                 throw new CorsNotExistsException("Cors Not Exists");
             }
-            httpResponse.setHeader("Access-Control-Allow-Origin", allowedCors);
+            httpResponse.setHeader(ACCESS_CONTROL_ALLOW_ORIGIN, allowedCors);
             filterChain.doFilter(request, response);
         } catch (RuntimeException runtimeException) {
             httpResponse.setStatus(UNAUTHORIZED.value());
