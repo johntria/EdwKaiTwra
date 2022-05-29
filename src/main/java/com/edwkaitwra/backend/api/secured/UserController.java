@@ -27,7 +27,6 @@ public class UserController {
     @GetMapping("/users")
     @RolesAllowed(GODUSER)
     public ResponseEntity<List<User>> getUser() {
-
         return ResponseEntity.ok().body(userService.getUsers());
     }
 

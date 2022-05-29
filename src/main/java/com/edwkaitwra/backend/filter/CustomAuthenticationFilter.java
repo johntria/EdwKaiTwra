@@ -41,9 +41,15 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         this.jwtSecret = jwtSecret;
     }
 
+    @Override
+    protected void initFilterBean() throws ServletException {
+        this.logger.warn("Initialized Authentication Filter");
+    }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+        log.info("Authentication Filter");
+
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         Authentication authentication = null;

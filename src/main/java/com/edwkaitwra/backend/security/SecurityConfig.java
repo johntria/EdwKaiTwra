@@ -2,8 +2,10 @@ package com.edwkaitwra.backend.security;
 
 import com.edwkaitwra.backend.filter.CustomAuthenticationFilter;
 import com.edwkaitwra.backend.filter.CustomAuthorizationFilter;
+import com.edwkaitwra.backend.filter.CustomCorsFilter;
 import com.edwkaitwra.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -24,12 +26,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
+@Slf4j
 public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
     private UserService userService;
+
+    @Value("${application.fe}")
+    private String allowedCors;
     @Value("${key.access-token-expired}")
     private Integer accessTokenExpiredInDays;
     @Value("${key.refresh-token-expired}")
@@ -41,24 +47,23 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf().disable().cors().disable();
-
+                .cors().and().csrf().disable();
 
         http
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http
-                .authorizeRequests()
-                .antMatchers("/error", "/api/open/**").permitAll();
-        http
-                .authorizeRequests()
-                .antMatchers("/api/auth/**", "/api/login ", "/api/token/refresh/**").permitAll();
-        http
-                .authorizeRequests()
-                .anyRequest().authenticated();
+//
+//        http
+//                .authorizeRequests()
+//                .antMatchers("/api/auth/**", "/api/login ").permitAll();
+//        http
+//                .authorizeRequests()
+//                .anyRequest().authenticated();
         // apply the custom DSL which adds the custom filter
         http
                 .apply(customDsl());
+        http
+                .addFilterBefore(new CustomCorsFilter(allowedCors), UsernamePasswordAuthenticationFilter.class);
         http
                 .addFilterBefore(new CustomAuthorizationFilter(jwtSecret, userService), UsernamePasswordAuthenticationFilter.class);
 
@@ -70,10 +75,10 @@ public class SecurityConfig {
         return new MyCustomDsl();
     }
 
-
     public class MyCustomDsl extends AbstractHttpConfigurer<MyCustomDsl, HttpSecurity> {
         @Override
         public void configure(HttpSecurity http) throws Exception {
+
             AuthenticationManager authenticationManager =
                     http.getSharedObject(AuthenticationManager.class);
 
@@ -85,3 +90,4 @@ public class SecurityConfig {
     }
 
 }
+

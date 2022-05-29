@@ -79,9 +79,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void isActivated(User user, String email) {
-        if (user.isActivated()) {
-            log.info("User " + email + " is already activated");
-        } else {
+        if (!user.isActivated()) {
             log.error("User " + email + " is not activated");
             throw new UserIsNotActivatedException("Your account is not activated, " + "Please look at your emails ");
         }

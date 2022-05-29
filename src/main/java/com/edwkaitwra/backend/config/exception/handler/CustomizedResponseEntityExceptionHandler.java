@@ -26,6 +26,7 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
         return new ResponseEntity<>(exceptionResponse, HttpStatus.FORBIDDEN);
     }
 
+
     @ExceptionHandler(Exception.class)
     @RequestMapping("/error")
     public final ResponseEntity<?> handleAllExceptions(Exception ex, WebRequest request) {

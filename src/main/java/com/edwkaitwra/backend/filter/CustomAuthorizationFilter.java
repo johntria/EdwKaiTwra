@@ -17,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -40,8 +41,14 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
     }
 
     @Override
+    protected void initFilterBean() throws ServletException {
+        this.logger.warn("Initialized Authorization Filter");
+    }
+
+
+    @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (request.getServletPath().equals("/api/login") || request.getServletPath().equals("/api/auth/token/refresh")) {
+        if (request.getServletPath().contains("/api/login") || request.getServletPath().contains("/api/auth")) {
             filterChain.doFilter(request, response);
         } else {
             String authorizationHeader = request.getHeader(AUTHORIZATION);
@@ -52,7 +59,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     JWTVerifier verifier = JWT.require(algorithm).build();
                     DecodedJWT decodedJWT = verifier.verify(token);
                     String username = decodedJWT.getSubject();
-                    this.logger.info("User:" + username + " try to authorized with token ");
+                    this.logger.info("Attempts Authorization with Email:" + username);
                     String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
                     Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
                     stream(roles).forEach(role -> {
@@ -66,6 +73,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     response.setStatus(FORBIDDEN.value());
                     Map<String, String> error = new HashMap<>();
                     this.logger.error(e.getMessage());
+                    error.put("timestamp", String.valueOf(LocalDateTime.now()));
                     error.put("message", FORBIDDEN.getReasonPhrase());
                     response.setContentType(APPLICATION_JSON_VALUE);
                     new ObjectMapper().writeValue(response.getOutputStream(), error);
