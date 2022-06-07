@@ -52,14 +52,11 @@ public class SecurityConfig {
         http
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-//
-//        http
-//                .authorizeRequests()
-//                .antMatchers("/api/auth/**", "/api/login ").permitAll();
-//        http
-//                .authorizeRequests()
-//                .anyRequest().authenticated();
-        // apply the custom DSL which adds the custom filter
+
+        http
+                .authorizeRequests()
+                .antMatchers("/open/**").permitAll();
+
         http
                 .apply(customDsl());
         http
@@ -84,7 +81,7 @@ public class SecurityConfig {
 
             CustomAuthenticationFilter filter =
                     new CustomAuthenticationFilter(authenticationManager, accessTokenExpiredInDays, refreshTokenExpiredInDays, jwtSecret);
-            filter.setFilterProcessesUrl("/api/login");
+            filter.setFilterProcessesUrl("/api/**");
             http.addFilter(filter);
         }
     }

@@ -48,8 +48,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        log.info("Authentication Filter");
-
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         Authentication authentication = null;
@@ -86,7 +84,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         Algorithm algorithm = Algorithm.HMAC256(jwtSecret.getBytes());
         String accessToken = JWT.create().withSubject(user.getUsername()).withExpiresAt(currentDatePlusDay(accessTokenExpiredInDays)).withIssuer(request.getRequestURL().toString()).withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList())).sign(algorithm);
 
-        String refreshToken = JWT.create().withSubject(user.getUsername()).withExpiresAt(currentDatePlusDay(refreshTokenExpiredInDays)).withIssuer(request.getRequestURL().toString()).sign(algorithm);
+        String refreshToken = JWT.create().withSubject(user.getUsername()).withExpiresAt(currentDatePlusDay(refreshTokenExpiredInDays)).withIssuer(request.getRequestURL().toString()).withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList())).sign(algorithm);
 
         Map<String, String> tokens = new HashMap<>();
         tokens.put("access_token", accessToken);

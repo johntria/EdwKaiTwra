@@ -44,7 +44,7 @@ public class AuthController {
 
     @GetMapping("/token/refresh")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        log.info("Rest request to refresh token");
+        log.info("Rest request /token/refresh refreshToken");
         String authorizationHeader = request.getHeader(AUTHORIZATION);
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             try {
@@ -53,6 +53,7 @@ public class AuthController {
                 JWTVerifier verifier = JWT.require(algorithm).build();
                 DecodedJWT decodedJWT = verifier.verify(refresh_token);
                 String username = decodedJWT.getSubject();
+                log.info("User " + username + "try to create access and refresh token");
                 User user = userService.getUser(username);
                 String access_token = JWT.create()
                         .withSubject(user.getEmail())
