@@ -1,20 +1,35 @@
 package com.edwkaitwra.backend.api.open;
 
+import com.edwkaitwra.backend.domain.User;
+import com.edwkaitwra.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.security.RolesAllowed;
+import java.util.List;
+
+import static com.edwkaitwra.backend.domain.Role.GODUSER;
 
 @RestController
 @RequestMapping("/open")
 @RequiredArgsConstructor
 @Slf4j
 public class TestController {
+    private final UserService userService;
+//    @GetMapping("/test")
+//    @ResponseBody
+//    public ResponseEntity<?> test() {
+//        String test = "{id:1}";
+//        return ResponseEntity.ok().body(test);
+//    }
+
     @GetMapping("/test")
-    public ResponseEntity<?> test() {
-        String test = "testttttttt";
-        return ResponseEntity.ok().body(test);
+    public ResponseEntity<List<User>> getUser() {
+        return ResponseEntity.ok().body(userService.getUsers());
     }
 }

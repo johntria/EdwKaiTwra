@@ -1,0 +1,25 @@
+server:
+  port: 8080
+application:
+  fe: http://localhost:4200
+key:
+  access-token-expired: 30 #days
+  refresh-token-expired: 90 #days
+  jwt-secret: R2[l%+<6NK]a+?Z+T-ey05Vma,@P-1+rVRv9c/Q3(I7*+G&Cl4)xFG|kN5~5gFob
+spring:
+  output:
+    ansi:
+      enabled: ALWAYS
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/EdwKaiTwra
+    username: root
+    password: mynewpassword
+  jpa:
+    hibernate.ddl-auto: update
+    generate-ddl: true
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+
+
