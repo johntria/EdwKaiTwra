@@ -75,7 +75,6 @@ public class SecurityConfig {
     public class MyCustomDsl extends AbstractHttpConfigurer<MyCustomDsl, HttpSecurity> {
         @Override
         public void configure(HttpSecurity http) throws Exception {
-
             AuthenticationManager authenticationManager =
                     http.getSharedObject(AuthenticationManager.class);
 
