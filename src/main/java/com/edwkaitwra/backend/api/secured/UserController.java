@@ -10,11 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.annotation.security.RolesAllowed;
 import java.net.URI;
 import java.util.List;
-
-import static com.edwkaitwra.backend.domain.Role.GODUSER;
 
 @RestController
 @RequestMapping("/api")
@@ -25,7 +22,7 @@ public class UserController {
 
 
     @GetMapping("/users")
-    @RolesAllowed(GODUSER)
+//    @RolesAllowed({GODUSER, USER})
     public ResponseEntity<List<User>> getUser() {
         return ResponseEntity.ok().body(userService.getUsers());
     }

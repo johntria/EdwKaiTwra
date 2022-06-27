@@ -29,7 +29,7 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/open/auth")
 @RequiredArgsConstructor
 @Slf4j
 public class AuthController {

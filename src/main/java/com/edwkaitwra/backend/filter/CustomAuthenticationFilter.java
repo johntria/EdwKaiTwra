@@ -28,10 +28,11 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-    private final AuthenticationManager authenticationManager;
     private final Integer accessTokenExpiredInDays;
     private final Integer refreshTokenExpiredInDays;
     private final String jwtSecret;
+
+    private final AuthenticationManager authenticationManager;
 
 
     public CustomAuthenticationFilter(AuthenticationManager authenticationManager, Integer accessTokenExpiredInDays, Integer refreshTokenExpiredInDays, String jwtSecret) {
@@ -42,22 +43,16 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     }
 
     @Override
-    protected void initFilterBean() throws ServletException {
-        this.logger.warn("Initialized Authentication Filter");
-    }
-
-    @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         Authentication authentication = null;
         log.info("Attempts Authentication with Email:" + email);
-
         try {
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
             authentication = authenticationManager.authenticate(authenticationToken);
         } catch (AuthenticationException e) {
-            this.logger.error("Authentication fail due to " + e.getMessage());
+            log.error("Authentication fail due to " + e.getMessage());
             Map<String, String> error = new HashMap<>();
             response.setStatus(UNAUTHORIZED.value());
             error.put("status", UNAUTHORIZED.getReasonPhrase());
@@ -69,7 +64,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-
         }
 
         return authentication;

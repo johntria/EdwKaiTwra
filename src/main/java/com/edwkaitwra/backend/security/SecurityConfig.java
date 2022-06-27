@@ -9,28 +9,23 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
-@Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 @Slf4j
+@EnableGlobalMethodSecurity(
+        securedEnabled = true,
+        jsr250Enabled = true,
+        prePostEnabled = true)
 public class SecurityConfig {
 
-    private final UserDetailsService userDetailsService;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
     private UserService userService;
 
@@ -46,27 +41,22 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .cors().and().csrf().disable();
 
-        http
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        //Authentication Filter
+        http.apply(customDsl());
 
-        http
-                .authorizeRequests()
-                .antMatchers("/open/**").permitAll();
+        //Cors Filter
+        CustomCorsFilter customCorsFilter = new CustomCorsFilter(allowedCors);
+        http.addFilterBefore(customCorsFilter, CustomAuthenticationFilter.class);
 
-        http
-                .apply(customDsl());
-        http
-                .addFilterBefore(new CustomCorsFilter(allowedCors), UsernamePasswordAuthenticationFilter.class);
-        http
-                .addFilterBefore(new CustomAuthorizationFilter(jwtSecret, userService), UsernamePasswordAuthenticationFilter.class);
+        //Authorization Filter
+        CustomAuthorizationFilter customAuthorizationFilter = new CustomAuthorizationFilter(jwtSecret, userService);
+        http.addFilterBefore(customAuthorizationFilter, CustomAuthenticationFilter.class);
 
 
         return http.build();
     }
+
 
     public MyCustomDsl customDsl() {
         return new MyCustomDsl();
@@ -80,7 +70,7 @@ public class SecurityConfig {
 
             CustomAuthenticationFilter filter =
                     new CustomAuthenticationFilter(authenticationManager, accessTokenExpiredInDays, refreshTokenExpiredInDays, jwtSecret);
-            filter.setFilterProcessesUrl("/api/**");
+            filter.setFilterProcessesUrl("/api/open/login");
             http.addFilter(filter);
         }
     }

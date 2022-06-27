@@ -25,7 +25,6 @@ public class CustomCorsFilter implements Filter {
         this.allowedCors = allowedCors;
     }
 
-
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
@@ -52,7 +51,5 @@ public class CustomCorsFilter implements Filter {
             response.setContentType(APPLICATION_JSON_VALUE);
             new ObjectMapper().writeValue(response.getOutputStream(), error);
         }
-
-
     }
 }
