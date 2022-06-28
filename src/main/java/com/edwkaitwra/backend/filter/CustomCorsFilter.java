@@ -1,6 +1,6 @@
 package com.edwkaitwra.backend.filter;
 
-import com.edwkaitwra.backend.config.exception.handler.CorsNotExistsException;
+import com.edwkaitwra.backend.config.exception.security.CorsNotExistsException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 

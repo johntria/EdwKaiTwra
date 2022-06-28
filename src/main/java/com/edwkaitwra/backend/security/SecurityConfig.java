@@ -41,6 +41,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        //We have to disable it due to we have custom authentication mechanism .
+        http.csrf().disable();
 
         //Authentication Filter
         http.apply(customDsl());
@@ -69,7 +71,7 @@ public class SecurityConfig {
                     http.getSharedObject(AuthenticationManager.class);
 
             CustomAuthenticationFilter filter =
-                    new CustomAuthenticationFilter(authenticationManager, accessTokenExpiredInDays, refreshTokenExpiredInDays, jwtSecret);
+                    new CustomAuthenticationFilter(authenticationManager, accessTokenExpiredInDays, refreshTokenExpiredInDays, jwtSecret, userService);
             filter.setFilterProcessesUrl("/api/open/login");
             http.addFilter(filter);
         }

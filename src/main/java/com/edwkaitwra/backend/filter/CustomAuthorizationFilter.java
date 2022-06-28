@@ -4,7 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.edwkaitwra.backend.config.exception.handler.BearerMissingException;
+import com.edwkaitwra.backend.config.exception.security.BearerMissingException;
 import com.edwkaitwra.backend.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;

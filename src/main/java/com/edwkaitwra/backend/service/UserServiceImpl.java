@@ -1,6 +1,6 @@
 package com.edwkaitwra.backend.service;
 
-import com.edwkaitwra.backend.config.exception.handler.UserIsNotActivatedException;
+import com.edwkaitwra.backend.config.exception.security.UserIsNotActivatedException;
 import com.edwkaitwra.backend.domain.Role;
 import com.edwkaitwra.backend.domain.User;
 import com.edwkaitwra.backend.repo.RoleRepo;

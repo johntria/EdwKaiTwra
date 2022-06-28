@@ -1,5 +1,6 @@
-package com.edwkaitwra.backend.config.exception.handler;
+package com.edwkaitwra.backend.config.exception;
 
+import com.edwkaitwra.backend.config.exception.security.UserIsNotActivatedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;

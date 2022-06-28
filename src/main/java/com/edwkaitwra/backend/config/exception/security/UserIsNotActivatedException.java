@@ -1,4 +1,4 @@
-package com.edwkaitwra.backend.config.exception.handler;
+package com.edwkaitwra.backend.config.exception.security;
 
 public class UserIsNotActivatedException extends RuntimeException {
 
