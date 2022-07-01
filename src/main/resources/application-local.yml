@@ -1,7 +1,9 @@
 server:
-  port: 8080
+  port: 8081
 application:
   fe: http://localhost:4200
+default-users:
+  password: 3w3P!!_-@A
 key:
   access-token-expired: 30 #days
   refresh-token-expired: 90 #days
@@ -16,10 +18,17 @@ spring:
     username: root
     password: mynewpassword
   jpa:
-    hibernate.ddl-auto: update
     generate-ddl: true
+    hibernate:
+      ddl-auto: update
     show-sql: true
+    defer-datasource-initialization: true
     properties:
       hibernate.format_sql: true
+  sql:
+    init:
+      mode: always
+      platform: mysql
+
 
 

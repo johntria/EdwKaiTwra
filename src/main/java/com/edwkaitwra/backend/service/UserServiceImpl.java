@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.management.relation.RoleNotFoundException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,24 +49,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userRepo.save(user);
     }
 
-    @Override
-    public Role saveRole(Role role) {
-        log.info("Saving new role" + role + " to DB");
-        return roleRepo.save(role);
-    }
 
     @Override
-    public void addRoleToUser(String email, String roleName) {
+    public void addRoleToUser(String email, String roleName) throws RoleNotFoundException {
         log.info("Adding role " + roleName + " to user " + email);
         User user = userRepo.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        Role role = roleRepo.findByName(roleName);
+        Role role = roleRepo.findByName(roleName).orElseThrow(() -> new RoleNotFoundException("User not found"));
+
 
         //It's a transactional service, in .add we automatically save in DB
         user.getRole().add(role);
     }
 
     @Override
-    public User getUser(String email) {
+    public User getUserByEmail(String email) {
         log.info("Fetching User " + email);
         User user = userRepo.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return user;

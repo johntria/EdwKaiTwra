@@ -54,7 +54,7 @@ public class AuthController {
                 DecodedJWT decodedJWT = verifier.verify(refresh_token);
                 String username = decodedJWT.getSubject();
                 log.info("User " + username + "try to create access and refresh token");
-                User user = userService.getUser(username);
+                User user = userService.getUserByEmail(username);
                 String access_token = JWT.create()
                         .withSubject(user.getEmail())
                         .withExpiresAt(currentDatePlusDay(accessTokenExpiredInDays))
