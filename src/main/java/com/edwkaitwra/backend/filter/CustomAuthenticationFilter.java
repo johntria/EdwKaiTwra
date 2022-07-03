@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.edwkaitwra.backend.utils.Utills.currentDatePlusDay;
+import static com.edwkaitwra.backend.utils.Utils.currentDatePlusDay;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 

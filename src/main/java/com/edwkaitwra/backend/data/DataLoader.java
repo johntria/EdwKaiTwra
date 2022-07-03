@@ -4,13 +4,13 @@ import com.edwkaitwra.backend.config.exception.RoleAlreadyExistsException;
 import com.edwkaitwra.backend.domain.User;
 import com.edwkaitwra.backend.service.RoleService;
 import com.edwkaitwra.backend.service.UserService;
+import com.edwkaitwra.backend.utils.Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -20,7 +20,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class DataLoader implements CommandLineRunner {
-    private final PasswordEncoder passwordEncoder;
     @Autowired
     private UserService userService;
     @Autowired
@@ -61,13 +60,13 @@ public class DataLoader implements CommandLineRunner {
                 userService.saveUser(
                         new User(
                                 email,
-                                passwordEncoder.encode(this.defaultPassword),
+                                this.defaultPassword,
                                 "default",
                                 LocalDateTime.now(),
                                 "default",
                                 true,
                                 "",
-                                List.of(roleService.findByName("ROLE_" + email.substring(0, email.indexOf('@')).toUpperCase()))
+                                List.of(roleService.findByName("ROLE_" + Utils.getStringBeforeSpecialCharacterAsUppercase(email, '@')))
                         )
                 );
             }
