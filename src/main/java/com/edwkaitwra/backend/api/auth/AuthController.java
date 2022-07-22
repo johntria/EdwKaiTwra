@@ -39,6 +39,9 @@ public class AuthController {
     @Value("${key.access-token-expired}")
     private Integer accessTokenExpiredInDays;
 
+    @Value("${key.refresh-token-expired}")
+    private Integer refreshTokenExpiredInDays;
+
     @Value("${key.jwt-secret}")
     private String jwtSecret;
 
@@ -61,9 +64,16 @@ public class AuthController {
                         .withIssuer(request.getRequestURL().toString())
                         .withClaim("roles", user.getRole().stream().map(Role::getName).collect(Collectors.toList()))
                         .sign(algorithm);
+                String new_refresh_token
+                        = JWT.create()
+                        .withSubject(user.getEmail())
+                        .withExpiresAt(currentDatePlusDay(accessTokenExpiredInDays))
+                        .withIssuer(request.getRequestURL().toString())
+                        .withClaim("roles", user.getRole().stream().map(Role::getName).collect(Collectors.toList()))
+                        .sign(algorithm);
                 Map<String, String> tokens = new HashMap<>();
                 tokens.put("access_token", access_token);
-                tokens.put("refresh_token", refresh_token);
+                tokens.put("refresh_token", new_refresh_token);
                 response.setContentType(APPLICATION_JSON_VALUE);
                 new ObjectMapper().writeValue(response.getOutputStream(), tokens);
 

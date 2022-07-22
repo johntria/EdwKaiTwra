@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.edwkaitwra.backend.config.exception.security.PostRequestAllowedOnlyException;
 import com.edwkaitwra.backend.dto.LoginDTO;
 import com.edwkaitwra.backend.service.UserService;
+import com.edwkaitwra.backend.utils.ErrorMessages;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -64,7 +65,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             throwError(response, e.getMessage());
         } catch (IOException e) {
             //We need to validate that the field email or password exists in body
-            throwError(response, "Email or Password Missing");
+            log.error("Email or Password Missing");
+            throwError(response, ErrorMessages.UsernameOrPasswordDoesNotExist);
         }
         return authentication;
     }
@@ -75,7 +77,11 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         response.setStatus(UNAUTHORIZED.value());
         error.put("status", UNAUTHORIZED.getReasonPhrase());
         error.put("timestamp", String.valueOf(LocalDateTime.now()));
-        error.put("message", errorMessage);
+        if (errorMessage.equals("Bad credentials")) {
+            error.put("message", ErrorMessages.BadCredentials);
+        } else {
+            error.put("message", errorMessage);
+        }
         response.setContentType(APPLICATION_JSON_VALUE);
         try {
             new ObjectMapper().writeValue(response.getOutputStream(), error);

@@ -5,6 +5,7 @@ import com.edwkaitwra.backend.domain.Role;
 import com.edwkaitwra.backend.domain.User;
 import com.edwkaitwra.backend.repo.RoleRepo;
 import com.edwkaitwra.backend.repo.UserRepo;
+import com.edwkaitwra.backend.utils.ErrorMessages;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -78,7 +79,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public void isActivated(User user, String email) {
         if (!user.isActivated()) {
             log.error("User " + email + " is not activated");
-            throw new UserIsNotActivatedException("Your account is not activated, " + "Please look at your emails ");
+            throw new UserIsNotActivatedException(ErrorMessages.UserIsNotActivatedException);
         }
 
     }
