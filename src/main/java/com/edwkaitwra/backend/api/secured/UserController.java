@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -21,8 +22,13 @@ public class UserController {
 
     @GetMapping("/users")
 //    @RolesAllowed({GODUSER, USER})
-    public ResponseEntity<List<User>> getUser() {
+    public ResponseEntity<List<User>> getUsers() {
         return ResponseEntity.ok().body(userService.getUsers());
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<User> getUser(Principal principal) {
+        return ResponseEntity.ok().body(userService.getUserByEmail(principal.getName()));
     }
 
 
