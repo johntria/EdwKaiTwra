@@ -58,14 +58,14 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             }
             LoginDTO loginForm = objectMapper.readValue(body, LoginDTO.class);
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginForm.getEmail(), loginForm.getPassword());
-            log.info("Attempts Authentication with Email:" + loginForm.getEmail());
+            log.info("Attempts Authentication with EmailModel:" + loginForm.getEmail());
             authentication = authenticationManager.authenticate(authenticationToken);
 
         } catch (AuthenticationException e) {
             throwError(response, e.getMessage());
         } catch (IOException e) {
             //We need to validate that the field email or password exists in body
-            log.error("Email or Password Missing");
+            log.error("EmailModel or Password Missing");
             throwError(response, ErrorMessages.UsernameOrPasswordDoesNotExist);
         }
         return authentication;

@@ -6,21 +6,25 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Role {
-    public static final String GODUSER = "ROLE_GODUSER";
-    public static final String SUPERUSER = "ROLE_SUPERUSER";
-    public static final String USER = "ROLE_USER";
-
+public class Email {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
-    private String name;
+    private String receiver;
+
+    private String sender;
+
+    @Column(columnDefinition = "TEXT")
+    private String html;
+
+    private LocalDateTime sentAt;
+
 }

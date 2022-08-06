@@ -57,7 +57,7 @@ public class CustomAuthorizationFilter implements Filter {
                 JWTVerifier verifier = JWT.require(algorithm).build();
                 DecodedJWT decodedJWT = verifier.verify(token);
                 String username = decodedJWT.getSubject();
-                log.info("Attempts Authorization with Email:" + username);
+                log.info("Attempts Authorization with EmailModel:" + username);
                 String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
                 Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
                 stream(roles).forEach(role -> {

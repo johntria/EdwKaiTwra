@@ -1,9 +1,10 @@
-package com.edwkaitwra.backend.service;
+package com.edwkaitwra.backend.service.impl;
 
 import com.edwkaitwra.backend.config.exception.RoleAlreadyExistsException;
 import com.edwkaitwra.backend.config.exception.RoleNotFoundException;
 import com.edwkaitwra.backend.domain.Role;
 import com.edwkaitwra.backend.repo.RoleRepo;
+import com.edwkaitwra.backend.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

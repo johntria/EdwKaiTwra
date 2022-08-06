@@ -1,10 +1,11 @@
-package com.edwkaitwra.backend.service;
+package com.edwkaitwra.backend.service.impl;
 
 import com.edwkaitwra.backend.config.exception.security.UserIsNotActivatedException;
 import com.edwkaitwra.backend.domain.Role;
 import com.edwkaitwra.backend.domain.User;
 import com.edwkaitwra.backend.repo.RoleRepo;
 import com.edwkaitwra.backend.repo.UserRepo;
+import com.edwkaitwra.backend.service.UserService;
 import com.edwkaitwra.backend.utils.ErrorMessages;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
