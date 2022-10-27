@@ -1,4 +1,4 @@
-package com.edwkaitwra.backend.dto;
+package com.edwkaitwra.backend.domain.dto;
 
 import lombok.Data;
 import org.springframework.lang.Nullable;

@@ -1,4 +1,4 @@
-package com.edwkaitwra.backend.dto;
+package com.edwkaitwra.backend.domain.dto;
 
 import com.edwkaitwra.backend.domain.Role;
 import lombok.Data;

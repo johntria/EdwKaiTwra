@@ -3,7 +3,7 @@ package com.edwkaitwra.backend.filter;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.edwkaitwra.backend.config.exception.security.PostRequestAllowedOnlyException;
-import com.edwkaitwra.backend.dto.LoginDTO;
+import com.edwkaitwra.backend.domain.dto.LoginDTO;
 import com.edwkaitwra.backend.service.UserService;
 import com.edwkaitwra.backend.utils.ErrorMessages;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -19,7 +19,6 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-
     @GetMapping("/users")
 //    @RolesAllowed({GODUSER, USER})
     public ResponseEntity<List<User>> getUsers() {
@@ -30,7 +29,5 @@ public class UserController {
     public ResponseEntity<User> getUser(Principal principal) {
         return ResponseEntity.ok().body(userService.getUserByEmail(principal.getName()));
     }
-
-
 }
 
