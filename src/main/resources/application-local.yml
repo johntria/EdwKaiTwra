@@ -3,11 +3,11 @@ server:
 application:
   fe: http://localhost:4200
 default-users:
-  password: 3w3P!!_-@A
+  password: default_password
 key:
   access-token-expired: 30 #days
   refresh-token-expired: 90 #days
-  jwt-secret: R2[l%+<6NK]a+?Z+T-ey05Vma,@P-1+rVRv9c/Q3(I7*+G&Cl4)xFG|kN5~5gFob
+  jwt-secret: default_secret
 spring:
   output:
     ansi:
@@ -33,8 +33,8 @@ spring:
     default-encoding: UTF-8
     host: smtp.gmail.com
     port: 587
-    username: edwkaitwrateam@gmail.com
-    password: mtgfiykdlsnnppmh
+    username: mymail@gmail.com
+    password: mypass
     properties:
       mail:
         smtp:
